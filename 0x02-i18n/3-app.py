@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Get locale from request"""
+"""Parameterize templates"""
 from flask import Flask, render_template, request
-from flask_babel import Babel
+from flask_babel import Babel, gettext
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -26,7 +26,10 @@ def get_locale():
 @app.route('/', strict_slashes=False)
 def index():
     """Render the index page"""
-    return render_template('2-index.html')
+    home_title = gettext('Welcome to Holberton')
+    home_header = gettext('Hello world')
+    return render_template('3-index.html', home_title=home_title,
+                           home_header=home_header)
 
 
 if __name__ == "__main__":
