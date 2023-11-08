@@ -20,7 +20,7 @@ app.config.from_object(Config)
 @babel.localeselector
 def get_locale():
     """Get locale from request or header"""
-    if request.args.get('locale'):
+    if request.args.get('locale') in app.config['LANGUAGES']:
         return request.args.get('locale')
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
