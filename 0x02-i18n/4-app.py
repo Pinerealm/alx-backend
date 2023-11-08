@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Parameterize templates"""
+"""Force locale with URL parameter"""
 from flask import Flask, render_template, request
-from flask_babel import Babel, gettext
+from flask_babel import Babel
+from typing import Union
+
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -18,15 +20,16 @@ app.config.from_object(Config)
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> Union[str, None]:
     """Get locale from request or header"""
-    if request.args.get('locale') in app.config['LANGUAGES']:
-        return request.args.get('locale')
+    locale = request.args.get('locale')
+    if locale and locale in app.config['LANGUAGES']:
+        return locale
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route('/', strict_slashes=False)
-def index():
+def index() -> str:
     """Render the index page"""
     return render_template('4-index.html')
 
