@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """FIFO caching"""
 from base_caching import BaseCaching
+from collections import deque
 
 
 class FIFOCache(BaseCaching):
@@ -9,7 +10,7 @@ class FIFOCache(BaseCaching):
     def __init__(self):
         """Runs on instantiation"""
         super().__init__()
-        self.queue = []
+        self.queue = deque()
 
     def put(self, key, item):
         """Puts a key/value pair into cache"""
@@ -17,7 +18,7 @@ class FIFOCache(BaseCaching):
             if key in self.cache_data:
                 self.queue.remove(key)
             elif len(self.cache_data) >= self.MAX_ITEMS:
-                discard = self.queue.pop(0)
+                discard = self.queue.popleft()
                 del self.cache_data[discard]
                 print("DISCARD: {}".format(discard))
             self.queue.append(key)
