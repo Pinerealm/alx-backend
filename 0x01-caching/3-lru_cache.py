@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """LRU Caching"""
 from base_caching import BaseCaching
+from collections import deque
 
 
 class LRUCache(BaseCaching):
@@ -10,7 +11,7 @@ class LRUCache(BaseCaching):
         """Runs upon instantiation
         """
         super().__init__()
-        self.queue = []
+        self.queue = deque()
 
     def put(self, key, item):
         """Puts a key/value pair into cache
@@ -19,7 +20,7 @@ class LRUCache(BaseCaching):
             if key in self.cache_data:
                 self.queue.remove(key)
             elif len(self.cache_data) >= self.MAX_ITEMS:
-                discard = self.queue.pop(0)
+                discard = self.queue.popleft()
                 del self.cache_data[discard]
                 print("DISCARD: {}".format(discard))
             self.queue.append(key)
