@@ -54,13 +54,13 @@ def get_timezone() -> Union[str, None]:
     timezone = request.args.get('timezone')
     if timezone:
         try:
-            return pytz.timezone(timezone)
+            return pytz.timezone(timezone).zone
         except pytz.exceptions.UnknownTimeZoneError:
             pass
     elif g.user:
         if g.user['timezone']:
             try:
-                return pytz.timezone(g.user['timezone'])
+                return pytz.timezone(g.user['timezone']).zone
             except pytz.exceptions.UnknownTimeZoneError:
                 pass
     return app.config['BABEL_DEFAULT_TIMEZONE']
@@ -72,7 +72,7 @@ def before_request() -> None:
     user_id = request.args.get('login_as')
     if user_id:
         user = get_user(int(user_id))
-        g.user = user if user else None
+        g.user = user
     else:
         g.user = None
 

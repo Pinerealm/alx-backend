@@ -51,17 +51,17 @@ def get_locale() -> Union[str, None]:
 def get_timezone() -> Union[str, None]:
     """Get timezone from request or header"""
     timezone = request.args.get('timezone')
+
     if timezone:
         try:
-            return pytz.timezone(timezone)
+            return pytz.timezone(timezone).zone
         except pytz.exceptions.UnknownTimeZoneError:
             pass
-    elif g.user:
-        if g.user['timezone']:
-            try:
-                return pytz.timezone(g.user['timezone'])
-            except pytz.exceptions.UnknownTimeZoneError:
-                pass
+    elif g.user and g.user['timezone']:
+        try:
+            return pytz.timezone(g.user['timezone']).zone
+        except pytz.exceptions.UnknownTimeZoneError:
+            pass
     return app.config['BABEL_DEFAULT_TIMEZONE']
 
 
@@ -71,7 +71,7 @@ def before_request() -> None:
     user_id = request.args.get('login_as')
     if user_id:
         user = get_user(int(user_id))
-        g.user = user if user else None
+        g.user = user
     else:
         g.user = None
 
@@ -79,7 +79,7 @@ def before_request() -> None:
 @app.route('/', strict_slashes=False)
 def index() -> str:
     """Render the index page"""
-    return render_template('5-index.html')
+    return render_template('7-index.html')
 
 
 if __name__ == "__main__":
