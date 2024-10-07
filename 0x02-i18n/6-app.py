@@ -52,7 +52,7 @@ def before_request() -> None:
     user_id = request.args.get('login_as')
     if user_id:
         user = get_user(int(user_id))
-        g.user = user
+        g.user = user if user else None
     else:
         g.user = None
 
